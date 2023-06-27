@@ -1,0 +1,21 @@
+.marginlink{
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 25px;
+    font-weight: 10px;
+}
+
+.titlenav{
+    margin-left: 200px;
+    margin-right: 1150px;
+    font-size: 40px;
+    font-weight: 10px;
+}
+
+.page_content{
+    margin-top: 400px;
+}
+
+.custom{
+    margin-top: 90px;
+}

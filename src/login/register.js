@@ -1,59 +1,148 @@
-import React from "react";
+import React, { useState } from "react";
 import "./login.css";
 
-import { Link } from 'react-router-dom';
 
 const Register = () => {
-    return(
-        <div className="cover">
-            
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
-        <div class="Login bg-success">
-            <form>
-                <h1 class="text-center text-white">Register</h1>
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-                <div className="form-group was-validated">
-                    <label class="form-label text-white" for="text">Name</label>
-                    <input class="form-control" type="text" id="text" required/>
-                    <div class="invalid-feedback">
-                        Please Enter Your Name
-                    </div>                    
-                </div>
+    // Create an object with the form data
+    const formData = {
+      name: name,
+      age: age,
+      email: email,
+      password: password,
+    };
 
-                <div className="form-group was-validated">
-                    <label class="form-label text-white" for="text">Age</label>
-                    <input class="form-control" type="text" id="text" required/>
-                    <div class="invalid-feedback">
-                        Please Enter Your Age
-                    </div>                    
-                </div>
+    // Make a POST request to the backend endpoint
+    fetch("http://localhost:3001/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data); // Log the response from the backend
+        // Reset the form fields
+        setName("");
+        setAge("");
+        setEmail("");
+        setPassword("");
 
-                <div className="form-group was-validated">
-                    <label class="form-label text-white" for="email">Email Address</label>
-                    <input class="form-control" type="email" id="email" required/>
-                    <div class="invalid-feedback">
-                        Please Enter Your Email Address
-                    </div>                    
-                </div>
+        // Show alert
+        setShowAlert(true);
+      })
+      .catch((error) => {
+        console.log(error); // Log any errors that occurred during the request
+      });
+  };
 
-                <div className="form-group was-validated">
-                    <label class="form-label text-white" for="password">Password</label>
-                    <input class="form-control" type="password" id="password" required/>
-                    <div class="invalid-feedback">
-                        Please Enter Your Password
-                    </div>                    
-                </div>
-                
-                <Link to="/"><input class="btn btn-success bg-danger text-white w-50" type="submit" value="Cancel"/></Link>
-                <input class="btn btn-success bg-primary text-white w-50" type="submit" value="Register"/>
+  return (
+    <div className="cover">
+      <div className="Login bg-success">
+        <form onSubmit={handleSubmit}>
+          <h1 className="text-center text-white">Register</h1>
 
-            </form>
-        </div>
-            
+          <div className="form-group was-validated">
+            <label className="form-label text-white" htmlFor="name">
+              Name
+            </label>
+            <input
+              className="form-control"
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <div className="invalid-feedback">Please Enter Your Name</div>
+          </div>
 
+          <div className="form-group was-validated">
+            <label className="form-label text-white" htmlFor="age">
+              Age
+            </label>
+            <input
+              className="form-control"
+              type="text"
+              id="age"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+              required
+            />
+            <div className="invalid-feedback">Please Enter Your Age</div>
+          </div>
 
-        </div>
-    )
-}
+          <div className="form-group was-validated">
+            <label className="form-label text-white" htmlFor="email">
+              Email Address
+            </label>
+            <input
+              className="form-control"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <div className="invalid-feedback">
+              Please Enter Your Email Address
+            </div>
+          </div>
 
-export default Register
+          <div className="form-group was-validated">
+            <label className="form-label text-white" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="form-control"
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <div className="invalid-feedback">Please Enter Your Password</div>
+          </div>
+
+          <input
+            className="btn btn-success bg-primary text-white w-50"
+            type="submit"
+            value="Register"
+          />
+          <input
+            className="btn btn-success bg-danger text-white w-50"
+            type="button"
+            value="Cancel"
+            onClick={() => {
+              window.location.href = "/";
+            }}
+          />
+        </form>
+        {showAlert && (
+          <div className="alert alert-success mt-3" role="alert">
+            User has been created.
+            <button
+              className="btn btn-primary mx-4"
+              onClick={() => {
+                window.location.href = "/";
+              }}
+            >
+              OK
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Register;
